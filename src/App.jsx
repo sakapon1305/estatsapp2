@@ -12,7 +12,11 @@ export const App = () => {
   //const { isLogin, isError, onClickCheckUser } = useLogin();
   return (
     //ログインの状態によって返すコンポーネントを決定する
-    <div className="App">
+    <div
+      className="App"
+      //flexを宣言すると、子コンポーネントはフレックスアイテムになる、Directionでデータが表示される方向を決めて、minHeight は、要素の最小高さをビューポートの高さになるようにする
+      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+    >
       <Headercom></Headercom>
       <BrowserRouter>
         <Routes>

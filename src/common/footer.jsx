@@ -9,8 +9,8 @@ import ListItemText from "@mui/material/ListItemText";
 
 export default function footer() {
   return (
-    <Box sx={{ flexGrow: 0, position: "absolute", bottom: 0, width: "100%" }}>
-      <AppBar component="footer" position="static">
+    <Box sx={{ flexGrow: 0, mt: "auto", width: "100%", position: "" }}>
+      <AppBar component="footer" position="static" bottom="10px">
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           ◼︎参考サイト
         </Typography>

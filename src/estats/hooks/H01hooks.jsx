@@ -67,37 +67,27 @@ export const H01hooks = (props) => {
         setIsLoading(false);
         const data = response.data;
         // Javascriptのfilterを使って、jsonデータからデータを抽出します
-        var valueData = data["GET_STATS_DATA"]["STATISTICAL_DATA"]["DATA_INF"][
-          "VALUE"
-        ].filter(function (item, index) {
+        const valueData = data["GET_STATS_DATA"]["STATISTICAL_DATA"][
+          "DATA_INF"
+        ]["VALUE"].filter(function (item, index) {
           return true;
         });
 
         console.log(`Valueの中身${JSON.stringify(valueData)}`);
 
-        // メタ情報から横軸事項を取得
-        var apiMetaYokoList = data["GET_STATS_DATA"]["STATISTICAL_DATA"][
+        // メタ情報から横軸を取得
+        const apiMetaYokoList = data["GET_STATS_DATA"]["STATISTICAL_DATA"][
           "CLASS_INF"
-        ]["CLASS_OBJ"].filter(function (item, index) {
-          if (item["@id"] == "time") {
-            return true;
-          }
-        });
+        ]["CLASS_OBJ"].filter((item) => item["@id"] === "time");
         console.log(`apiMetaYokoList:${JSON.stringify(apiMetaYokoList)}`);
-        setDataList(apiMetaYokoList);
 
         // 単位を取得
-        var apiMetaCat01List = data["GET_STATS_DATA"]["STATISTICAL_DATA"][
+        const apiMetaCat01List = data["GET_STATS_DATA"]["STATISTICAL_DATA"][
           "CLASS_INF"
-        ]["CLASS_OBJ"].filter(function (item, index) {
-          if (item["@id"] == "cat01") {
-            return true;
-          }
-        });
-        setDataList(apiMetaCat01List);
+        ]["CLASS_OBJ"].filter((item) => item["@id"] === "cat01");
         console.log(`apiMetaCat01List:${JSON.stringify(apiMetaCat01List)}`);
 
-        var Unit = apiMetaCat01List[0]["CLASS"]["@unit"];
+        const Unit = apiMetaCat01List[0]["CLASS"]["@unit"];
         console.log(`Unit: ${Unit}`);
 
         setDataList({
@@ -118,39 +108,30 @@ export const H01hooks = (props) => {
     console.log("Updated dataList:", dataList);
   }, [dataList]);
 
-  // グラフに描画するデータを格納する配列
-  const graphData = new Array();
-  for (var key in dataList.valueData) {
-    // メタ情報
-    var apiYokoName = dataList.apiMetaYokoList[0]["CLASS"].filter(function (
-      item,
-      index
-    ) {
-      if (item["@code"] == dataList.valueData[key]["@time"]) {
-        return true;
-      }
-    });
-    graphData.push({
-      name: apiYokoName[0]["@name"] + "年",
-      value: dataList.valueData[key]["$"],
-    });
-  }
-  // ここで実際のデータ取得処理を行う
-  // const data = {
-  //   labels: ["January", "February", "March", "April", "May", "June"],
-  //   datasets: [
-  //     {
-  //       label: "Sales",
-  //       data: [65, 59, 80, 81, 56, 55],
-  //       backgroundColor: "rgba(75,192,192,0.4)",
-  //       borderColor: "rgba(75,192,192,1)",
-  //       borderWidth: 1,
-  //     },
-  //   ],
-  // };
-  // // const options = {
-  // //   maintainAspectRatio: false,
-  // // };
+  // ラベルを作成する
+  const labels = dataList.valueData.map((item) => {
+    //apiMetaYokoListにある@codeの値とvalueDataの@timeの値が一致するものを変数に格納して横軸を作成する
+    const yokoName = dataList.apiMetaYokoList[0]["CLASS"].find(
+      (yoko) => yoko["@code"] === item["@time"]
+    );
+    //見つかった場合は@codeの値＋年をつけて返す、ない場合は空文字を返す
+    return yokoName ? `${yokoName["@code"]}年` : "";
+  });
+
+  // グラフデータの作成
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "%",
+        data: dataList.valueData.map((item) => item["$"]),
+        backgroundColor: "rgba(75,192,192,0.4)",
+        borderColor: "rgba(175,192,192,1)",
+        borderWidth: 1,
+      },
+    ],
+  };
+
   //表形式にするためのテーブルヘッダを作成する
   // const renderTableHeader = () => {
   //   if (dataList) {
@@ -207,33 +188,37 @@ export const H01hooks = (props) => {
           </table> */}
 
           <Bar
-            data={graphData}
+            data={data}
             options={{
-              responsive: true,
+              responsive: true, //大きさを自動で変えるか否か
               scales: {
                 x: {
                   type: "category", // x軸にcategoryスケールを使用
                   title: {
                     display: true,
-                    text: "Months",
+                    text: "年",
                   },
                 },
                 y: {
-                  type: "linear", // y軸にlinearスケールを使用
+                  type: "linear", // y軸にlinearスケールを使用、数値を線形で表示
                   title: {
                     display: true,
-                    text: "Sales",
+                    text: "%",
                   },
                 },
               },
+              //追加の設定
               plugins: {
+                //タイトル
                 title: {
                   display: true,
-                  text: "Sales Over Time",
+                  text: "東京都65歳以上の方の割合",
                 },
+                //ツールチップ触れると説明が出てくる
                 tooltip: {
                   enabled: true,
                 },
+                //凡例のオプション
                 legend: {
                   display: true,
                   position: "top",
@@ -241,7 +226,6 @@ export const H01hooks = (props) => {
               },
             }}
           />
-          {/* <p css={tbodyStyle}>ステータスコード：{dataList}</p> */}
         </div>
       )}
       {/* エラー時の場合はエラーを表示する */}
