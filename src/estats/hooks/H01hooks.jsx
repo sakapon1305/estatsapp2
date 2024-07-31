@@ -4,9 +4,27 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { jsx, css } from "@emotion/react";
 import axios from "axios";
-import { Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
 export const H01hooks = (props) => {
+  // Chart.jsのスケールとエレメントを登録
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+  );
   //EmotionによるCSS記述
   const tbodyStyle = css`
     border: solid 1px #aaa;
@@ -117,26 +135,22 @@ export const H01hooks = (props) => {
       value: dataList.valueData[key]["$"],
     });
   }
-  const labels = ["1 月", "2 月", "3 月", "4 月", "5 月", "6 月"];
-  // const graphData = {
-  //   labels: labels,
+  // ここで実際のデータ取得処理を行う
+  // const data = {
+  //   labels: ["January", "February", "March", "April", "May", "June"],
   //   datasets: [
   //     {
-  //       label: "A社",
-  //       data: [65, 59, 60, 81, 56, 55],
-  //       borderColor: "rgb(75, 192, 192)",
-  //     },
-  //     {
-  //       label: "B社",
-  //       data: [60, 55, 57, 61, 75, 50],
-  //       borderColor: "rgb(75, 100, 192)",
+  //       label: "Sales",
+  //       data: [65, 59, 80, 81, 56, 55],
+  //       backgroundColor: "rgba(75,192,192,0.4)",
+  //       borderColor: "rgba(75,192,192,1)",
+  //       borderWidth: 1,
   //     },
   //   ],
   // };
-
-  // const options = {
-  //   maintainAspectRatio: false,
-  // };
+  // // const options = {
+  // //   maintainAspectRatio: false,
+  // // };
   //表形式にするためのテーブルヘッダを作成する
   // const renderTableHeader = () => {
   //   if (dataList) {
@@ -188,10 +202,45 @@ export const H01hooks = (props) => {
             </thead>
             <tbody css={tbodyStyle}>{renderTableBody()}</tbody>
           </table> */}
-          <table>
+          {/* <table>
             <td>{JSON.stringify(dataList.apiMetaYokoList)}</td>
-          </table>
+          </table> */}
 
+          <Bar
+            data={graphData}
+            options={{
+              responsive: true,
+              scales: {
+                x: {
+                  type: "category", // x軸にcategoryスケールを使用
+                  title: {
+                    display: true,
+                    text: "Months",
+                  },
+                },
+                y: {
+                  type: "linear", // y軸にlinearスケールを使用
+                  title: {
+                    display: true,
+                    text: "Sales",
+                  },
+                },
+              },
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Sales Over Time",
+                },
+                tooltip: {
+                  enabled: true,
+                },
+                legend: {
+                  display: true,
+                  position: "top",
+                },
+              },
+            }}
+          />
           {/* <p css={tbodyStyle}>ステータスコード：{dataList}</p> */}
         </div>
       )}
