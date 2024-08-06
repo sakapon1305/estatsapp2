@@ -25,7 +25,7 @@ export const LoginCom = () => {
       //setIsError(false);
     } else {
       console.log("IDかパスワードが間違っています");
-      window.alert("Dかパスワードが間違っています");
+      window.alert("IDかパスワードが間違っています");
       setIsError("IDかパスワードが間違っています");
     }
   };

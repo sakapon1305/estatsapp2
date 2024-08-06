@@ -16,6 +16,7 @@ import {
 } from "chart.js";
 
 export const H01hooks = (props) => {
+  console.log(props);
   // Chart.jsのスケールとエレメントを登録
   ChartJS.register(
     CategoryScale,
@@ -60,10 +61,14 @@ export const H01hooks = (props) => {
   useEffect(() => {
     setIsLoading(true);
     axios
-      .get("http://localhost:3002/api/data")
+      .get("http://localhost:3002/api/data", {
+        params: {
+          req: url,
+        },
+      })
       .then((response) => {
         //axiosのdataプロパティにデータがあるから.dataと書く
-        console.log(response.data);
+        //console.log(response.data);
         setIsLoading(false);
         const data = response.data;
         // Javascriptのfilterを使って、jsonデータからデータを抽出します
@@ -73,22 +78,22 @@ export const H01hooks = (props) => {
           return true;
         });
 
-        console.log(`Valueの中身${JSON.stringify(valueData)}`);
+        //console.log(`Valueの中身${JSON.stringify(valueData)}`);
 
         // メタ情報から横軸を取得
         const apiMetaYokoList = data["GET_STATS_DATA"]["STATISTICAL_DATA"][
           "CLASS_INF"
         ]["CLASS_OBJ"].filter((item) => item["@id"] === "time");
-        console.log(`apiMetaYokoList:${JSON.stringify(apiMetaYokoList)}`);
+        //console.log(`apiMetaYokoList:${JSON.stringify(apiMetaYokoList)}`);
 
         // 単位を取得
         const apiMetaCat01List = data["GET_STATS_DATA"]["STATISTICAL_DATA"][
           "CLASS_INF"
         ]["CLASS_OBJ"].filter((item) => item["@id"] === "cat01");
-        console.log(`apiMetaCat01List:${JSON.stringify(apiMetaCat01List)}`);
+        //console.log(`apiMetaCat01List:${JSON.stringify(apiMetaCat01List)}`);
 
         const Unit = apiMetaCat01List[0]["CLASS"]["@unit"];
-        console.log(`Unit: ${Unit}`);
+        //console.log(`Unit: ${Unit}`);
 
         setDataList({
           valueData,
@@ -167,7 +172,6 @@ export const H01hooks = (props) => {
 
   return (
     <div align="center">
-      <h2>取得結果</h2>
       {dataList === null || dataList === undefined ? (
         "取得できませんでした"
       ) : (
@@ -212,7 +216,6 @@ export const H01hooks = (props) => {
                 //タイトル
                 title: {
                   display: true,
-                  text: "東京都65歳以上の方の割合",
                 },
                 //ツールチップ触れると説明が出てくる
                 tooltip: {

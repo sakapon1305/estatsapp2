@@ -41,16 +41,6 @@ export const HomeCom = () => {
           E-Stats取得
         </Button>
         <Button
-          onClick={onClickUserInfo}
-          className="estatsButton"
-          color="secondary"
-          variant="contained"
-          size="large"
-          sx={{ height: "100px", margin: "10px", float: "left" }}
-        >
-          ユーザー情報取得
-        </Button>
-        <Button
           onClick={onClickAddressInfo}
           className="estatsButton"
           color="error"
@@ -64,6 +54,16 @@ export const HomeCom = () => {
           }}
         >
           郵便番号から住所を取得
+        </Button>
+        <Button
+          onClick={onClickUserInfo}
+          className="estatsButton"
+          color="secondary"
+          variant="contained"
+          size="large"
+          sx={{ height: "100px", margin: "10px", float: "left" }}
+        >
+          ユーザー情報取得
         </Button>
       </Box>
       <Box

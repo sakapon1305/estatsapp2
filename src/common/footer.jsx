@@ -9,7 +9,8 @@ import ListItemText from "@mui/material/ListItemText";
 
 export default function footer() {
   return (
-    <Box sx={{ flexGrow: 0, mt: "auto", width: "100%", position: "" }}>
+    //mt: "auto"はmargin-topの略で可能な限り下にする
+    <Box sx={{ flexGrow: 0, mt: "auto", width: "100%" }}>
       <AppBar component="footer" position="static" bottom="10px">
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           ◼︎参考サイト
