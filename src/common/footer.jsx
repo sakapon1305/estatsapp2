@@ -5,8 +5,7 @@ import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
 
-//import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
-
+//defaultの場合はモジュールが1つの場合有効、Importするとき任意の名前をつけれる
 export default function footer() {
   return (
     //mt: "auto"はmargin-topの略で可能な限り下にする

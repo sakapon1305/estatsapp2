@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import { Footer } from "../common/footer";
+import Footer from "../common/footer";
 
 describe("Footer", () => {
   //renderを行い、それぞれのテキストを読み込む
@@ -12,6 +12,7 @@ describe("Footer", () => {
     );
 
     //expectで囲み、期待されているものがあればOK
-    //expect(screen.getByText("React Sample ver1.0")).toBeInTheDocument();
+    expect(screen.getByText("◼︎参考サイト")).toBeInTheDocument();
+    expect(screen.getByText("Reactについて")).toBeInTheDocument();
   });
 });
